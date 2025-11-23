@@ -39,3 +39,10 @@
 
 # debug information files
 *.dwo
+
+# cmake
+build/
+*CMakeFiles*
+
+# sim
+sim.log
