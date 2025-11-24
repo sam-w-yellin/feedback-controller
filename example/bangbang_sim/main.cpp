@@ -81,7 +81,7 @@ int main()
     auto convert_gpio = [](bool cmd) -> BangBangLaw::Command { return cmd; };
     GpioActuator<BangBangLaw, decltype(convert_gpio)> actuator(gpio, convert_gpio);
 
-    // Controller
+    // Integrated controller
     Controller<BangBangLaw, decltype(feedback), decltype(actuator)> controller(feedback, actuator,
                                                                                law);
 

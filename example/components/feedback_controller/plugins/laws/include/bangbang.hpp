@@ -4,8 +4,8 @@
 
 struct BangBangLaw
 {
-    using Measurement = int32_t;  // e.g., temperature in °C * 10
-    using Command = bool;         // on/off
+    using Measurement = int32_t; 
+    using Command = bool; 
     struct State
     {
         Command last_command{};
@@ -23,15 +23,13 @@ struct BangBangLaw
         config_.max_threshold = max_th;
     }
 
-    // Initialize the control law (returns initial state)
     std::expected<State, std::string> Initialize()
     {
         State s{};
-        s.last_command = false;  // start off
+        s.last_command = false;
         return s;
     }
 
-    // Compute next command and update state
     std::expected<std::pair<Command, State>, std::string> Compute(const Measurement& m)
     {
         if (m >= config_.max_threshold)
