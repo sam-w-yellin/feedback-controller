@@ -1,14 +1,14 @@
-#include "adc_interface.hpp"
-
 #include <cstdint>
 #include <expected>
 #include <optional>
 #include <string>
 
-class SimulatedAdc : public Adc {
-public:
-    SimulatedAdc(uint16_t initial_value = 0) 
-        : raw_value_(initial_value) {}
+#include "adc_interface.hpp"
+
+class SimulatedAdc : public Adc
+{
+   public:
+    SimulatedAdc(uint16_t initial_value = 0) : raw_value_(initial_value) {}
 
     std::optional<std::string> Configure() final override;
 
@@ -16,6 +16,6 @@ public:
 
     void SetRawValue(uint16_t value);
 
-private:
+   private:
     uint16_t raw_value_;
 };

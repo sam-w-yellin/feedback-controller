@@ -5,7 +5,8 @@
 #include <optional>
 #include <string>
 
-struct Adc {
+struct Adc
+{
     virtual ~Adc() = default;
 
     // Configure the ADC hardware

@@ -1,13 +1,14 @@
 #pragma once
 
-#include "gpio_interface.hpp"
-#include <optional>
 #include <cstdint>
+#include <optional>
 
-class SimulatedGpio : public Gpio {
-public:
-    SimulatedGpio(bool initial_state = false)
-        : state_(initial_state) {}
+#include "gpio_interface.hpp"
+
+class SimulatedGpio : public Gpio
+{
+   public:
+    SimulatedGpio(bool initial_state = false) : state_(initial_state) {}
 
     // Configure GPIO (simulated always succeeds)
     std::optional<std::string> Configure(Direction dir) final override;
@@ -17,7 +18,7 @@ public:
     // Read the current state
     std::expected<bool, std::string> Read() final override;
 
-private:
+   private:
     bool state_;
     Direction direction_ = Direction::Input;
 };

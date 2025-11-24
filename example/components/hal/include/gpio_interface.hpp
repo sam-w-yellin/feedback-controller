@@ -4,10 +4,15 @@
 #include <optional>
 #include <string>
 
-struct Gpio {
+struct Gpio
+{
     virtual ~Gpio() = default;
 
-    enum Direction { Input, Output };
+    enum Direction
+    {
+        Input,
+        Output
+    };
 
     // Configure the GPIO pin direction
     // Returns an error string if configuration fails
