@@ -95,20 +95,3 @@ class Controller
     ACT& act_;
     Law& law_;
 };
-
-template <typename FB, typename LAW, typename ACT>
-struct std::formatter<ControllerState<FB, LAW, ACT>>
-{
-    constexpr auto parse(std::format_parse_context& ctx)
-    {
-        return ctx.begin();
-    }
-
-    template <typename FormatContext>
-    auto format(const ControllerState<FB, LAW, ACT>& s, FormatContext& ctx) const
-    {
-        return std::format_to(ctx.out(), "{{ feedback: {}, control: {}, actuator: {} }}",
-                              to_string(s.feedback_state), to_string(s.control_state),
-                              to_string(s.actuator_state));
-    }
-};
