@@ -10,11 +10,11 @@ class GpioActuator
     using Command = typename LAW::Command;
     using State = bool;  // actual GPIO output state
 
-    GpioActuator(Gpio& gpio, Converter converter) : gpio_(gpio), convert_(converter) {}
+    GpioActuator(Gpio& gpio, Converter converter) : gpio_(gpio), Convert(converter) {}
 
     std::expected<State, std::string> Write(const Command& cmd)
     {
-        State gpio_state = convert_(cmd);  // convert command -> bool
+        State gpio_state = Convert(cmd);  // convert command -> bool
         const auto err = gpio_.Set(gpio_state);
         if (err.has_value())
         {
@@ -34,7 +34,7 @@ class GpioActuator
         return {};
     }
 
+    Converter Convert;
    private:
     Gpio& gpio_;
-    Converter convert_;
 };

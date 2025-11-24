@@ -10,7 +10,7 @@ struct AdcFeedback
     using Raw = uint16_t;
     using State = std::pair<Measurement, Raw>;
 
-    AdcFeedback(Adc& adc, Converter converter) : adc_(adc), convert_(converter) {}
+    AdcFeedback(Adc& adc, Converter converter) : adc_(adc), Convert(converter) {}
 
     std::expected<std::pair<Measurement, State>, std::string> Read()
     {
@@ -20,7 +20,7 @@ struct AdcFeedback
             return std::unexpected(maybe_raw.error());
         }
         const auto& raw = maybe_raw.value();
-        Measurement m = convert_(raw);
+        Measurement m = Convert(raw);
         return std::pair{m, std::pair{m, raw}};
     }
 
@@ -35,7 +35,7 @@ struct AdcFeedback
         return {};
     }
 
+    Converter Convert;
    private:
     Adc& adc_;
-    Converter convert_;
 };

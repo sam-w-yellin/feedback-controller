@@ -38,6 +38,8 @@ concept Feedback = ControlLaw<Law> && requires(FB fb) {
         fb.Read()
     } -> std::same_as<
         std::expected<std::pair<typename Law::Measurement, typename FB::State>, std::string>>;
+
+    { fb.Convert(std::declval<typename FB::Raw>()) } -> std::same_as<typename Law::Measurement>;
 };
 
 template <typename AC, typename Law>
@@ -47,6 +49,8 @@ concept Actuator = ControlLaw<Law> && requires(AC ac, const typename Law::Comman
     { ac.Configure() } -> std::same_as<std::optional<std::string>>;
 
     { ac.Write(cmd) } -> std::convertible_to<std::expected<typename AC::State, std::string>>;
+
+    { ac.Convert(std::declval<typename Law::Command>()) } -> std::same_as<typename AC::State>;
 };
 
 template <ControlLaw Law, Feedback<Law> FB, Actuator<Law> ACT>
