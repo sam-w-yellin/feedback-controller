@@ -3,7 +3,7 @@
 
 #include "adc.hpp"
 #include "adc_feedback.hpp"
-#include "bangbang.hpp"
+#include "bangbang_range.hpp"
 #include "feedback_controller_interface.hpp"
 #include "gpio.hpp"
 #include "gpio_actuator.hpp"
@@ -70,19 +70,19 @@ int main()
     SimulatedGpio gpio;
 
     // Bang-bang control law
-    BangBangLaw law(20 /* min */, 80 /* max */);
+    BangBangRangeLaw law(20 /* min */, 80 /* max */);
 
     // ADC Feedback
-    auto convert_adc = [](uint16_t raw) -> BangBangLaw::Measurement
-    { return static_cast<BangBangLaw::Measurement>(raw) / 10; };
-    AdcFeedback<BangBangLaw, decltype(convert_adc)> feedback(adc, convert_adc);
+    auto convert_adc = [](uint16_t raw) -> BangBangRangeLaw::Measurement
+    { return static_cast<BangBangRangeLaw::Measurement>(raw) / 10; };
+    AdcFeedback<BangBangRangeLaw, decltype(convert_adc)> feedback(adc, convert_adc);
 
     // GPIO Actuator
-    auto convert_gpio = [](bool cmd) -> BangBangLaw::Command { return cmd; };
-    GpioActuator<BangBangLaw, decltype(convert_gpio)> actuator(gpio, convert_gpio);
+    auto convert_gpio = [](bool cmd) -> BangBangRangeLaw::Command { return cmd; };
+    GpioActuator<BangBangRangeLaw, decltype(convert_gpio)> actuator(gpio, convert_gpio);
 
     // Integrated controller
-    Controller<BangBangLaw, decltype(feedback), decltype(actuator)> controller(feedback, actuator,
+    Controller<BangBangRangeLaw, decltype(feedback), decltype(actuator)> controller(feedback, actuator,
                                                                                law);
 
     auto init = controller.Initialize();

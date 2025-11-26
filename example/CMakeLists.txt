@@ -1,2 +1,3 @@
-add_subdirectory(bangbang_sim)
+add_subdirectory(bangbang_setpoint_sim)
+add_subdirectory(bangbang_range_sim)
 add_subdirectory(components/sim/hal)

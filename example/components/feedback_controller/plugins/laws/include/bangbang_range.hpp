@@ -2,7 +2,7 @@
 
 #include "feedback_controller_interface.hpp"
 
-struct BangBangLaw
+struct BangBangRangeLaw
 {
     using Measurement = int32_t; 
     using Command = bool; 
@@ -17,7 +17,7 @@ struct BangBangLaw
         Measurement max_threshold;
     };
 
-    BangBangLaw(Measurement min_th, Measurement max_th)
+    BangBangRangeLaw(Measurement min_th, Measurement max_th)
     {
         config_.min_threshold = min_th;
         config_.max_threshold = max_th;
