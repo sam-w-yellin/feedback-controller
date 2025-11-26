@@ -1,19 +1,18 @@
 #include "gpio.hpp"
 
 #include <cstdint>
-#include <optional>
 
-std::optional<std::string> SimulatedGpio::Configure(Direction dir)
+std::expected<void, std::string> SimulatedGpio::Configure(Direction dir)
 {
     direction_ = dir;
     return {};
 };
 
-std::optional<std::string> SimulatedGpio::Set(bool value)
+std::expected<void, std::string> SimulatedGpio::Set(bool value)
 {
     if (direction_ != Direction::Output)
     {
-        return "GPIO is not configured as output";
+        return std::unexpected("GPIO is not configured as output");
     }
     state_ = value;
     return {};

@@ -1,6 +1,6 @@
 #include "adc.hpp"
 
-std::optional<std::string> SimulatedAdc::Configure()
+std::expected<void, std::string> SimulatedAdc::Configure()
 {
     return {};
 }

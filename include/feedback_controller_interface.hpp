@@ -3,7 +3,6 @@
 #include <concepts>
 #include <expected>
 #include <format>
-#include <optional>
 #include <string>
 
 template <typename FB, typename LAW, typename ACT>
@@ -32,7 +31,7 @@ template <typename FB, typename Law>
 concept Feedback = ControlLaw<Law> && requires(FB fb) {
     typename FB::State;
 
-    { fb.Configure() } -> std::same_as<std::optional<std::string>>;
+    { fb.Configure() } -> std::same_as<std::expected<void, std::string>>;
 
     {
         fb.Read()
@@ -46,7 +45,7 @@ template <typename AC, typename Law>
 concept Actuator = ControlLaw<Law> && requires(AC ac, const typename Law::Command& cmd) {
     typename AC::State;
 
-    { ac.Configure() } -> std::same_as<std::optional<std::string>>;
+    { ac.Configure() } -> std::same_as<std::expected<void, std::string>>;
 
     { ac.Write(cmd) } -> std::convertible_to<std::expected<typename AC::State, std::string>>;
 
@@ -64,25 +63,33 @@ class Controller
 
     std::expected<typename Law::State, std::string> Initialize()
     {
-        if (auto err = fb_.Configure()) return std::unexpected(*err);
-        if (auto err = act_.Configure()) return std::unexpected(*err);
+        auto err = fb_.Configure();
+        if (!err) {
+            return std::unexpected(err.error());
+        }
+        err = act_.Configure();
+        if (!err) {
+            return std::unexpected(err.error());
+        }
         auto law_state = law_.Initialize();
-        if (!law_state.has_value()) return std::unexpected(law_state.error());
+        if (!law_state) {
+            return std::unexpected(law_state.error());
+        }
         return law_state.value();
     }
 
     std::expected<ControllerState<FB, Law, ACT>, std::string> Step()
     {
         auto fb_result = fb_.Read();
-        if (!fb_result.has_value()) return std::unexpected(fb_result.error());
+        if (!fb_result) return std::unexpected(fb_result.error());
         auto [measurement, fb_state] = *fb_result;
 
         auto law_result = law_.Compute(measurement);
-        if (!law_result.has_value()) return std::unexpected(law_result.error());
+        if (!law_result) return std::unexpected(law_result.error());
         auto [command, law_state] = *law_result;
 
         auto act_result = act_.Write(command);
-        if (!act_result.has_value()) return std::unexpected(act_result.error());
+        if (!act_result) return std::unexpected(act_result.error());
         auto act_state = *act_result;
 
         ControllerState<FB, Law, ACT> state{

@@ -15,21 +15,21 @@ class GpioActuator
     std::expected<State, std::string> Write(const Command& cmd)
     {
         State gpio_state = Convert(cmd);
-        const auto err = gpio_.Set(gpio_state);
-        if (err.has_value())
+        const auto result = gpio_.Set(gpio_state);
+        if (!result)
         {
-            return std::unexpected(std::format("Failed to set GPIO: {}", err.value()));
+            return std::unexpected(std::format("Failed to set GPIO: {}", result.error()));
         }
         return gpio_state;
     }
 
-    std::optional<std::string> Configure()
+    std::expected<void, std::string> Configure()
     {
         const auto configure_result = gpio_.Configure(Gpio::Output);
-        if (configure_result.has_value())
+        if (!configure_result)
         {
-            return std::make_optional(
-                std::format("GPIO configure failed: {}", configure_result.value()));
+            return std::unexpected(
+                std::format("GPIO configure failed: {}", configure_result.error()));
         }
         return {};
     }

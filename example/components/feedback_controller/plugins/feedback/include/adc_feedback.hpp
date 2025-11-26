@@ -24,13 +24,13 @@ struct AdcFeedback
         return std::pair{m, std::pair{m, raw}};
     }
 
-    std::optional<std::string> Configure()
+    std::expected<void, std::string> Configure()
     {
         const auto configure_result = adc_.Configure();
-        if (configure_result.has_value())
+        if (!configure_result)
         {
-            return std::make_optional(
-                std::format("ADC configure failed: {}", configure_result.value()));
+            return std::unexpected(
+                std::format("ADC configure failed: {}", configure_result.error()));
         }
         return {};
     }
