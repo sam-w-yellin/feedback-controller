@@ -3,14 +3,14 @@
 #include "adc_interface.hpp"
 #include "feedback_controller_interface.hpp"
 
-template <ControlLaw LAW, typename Converter>
+template <ControlLaw LAW, auto Converter>
 struct AdcFeedback
 {
     using Measurement = typename LAW::Measurement;
     using Raw = uint16_t;
     using State = std::pair<Measurement, Raw>;
 
-    AdcFeedback(Adc& adc, Converter converter) : adc_(adc), Convert(converter) {}
+    AdcFeedback(Adc& adc) : adc_(adc) {}
 
     std::expected<std::pair<Measurement, State>, std::string> Read()
     {
@@ -35,7 +35,10 @@ struct AdcFeedback
         return {};
     }
 
-    Converter Convert;
+    LAW::Measurement Convert(Raw raw)
+    {
+        return Converter(raw);
+    };
 
    private:
     Adc& adc_;

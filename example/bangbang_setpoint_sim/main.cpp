@@ -73,13 +73,13 @@ int main()
     BangBangSetpointLaw law(60 /* setpoint deg c */);
 
     // ADC Feedback
-    auto convert_adc = [](uint16_t raw) -> BangBangSetpointLaw::Measurement
-    { return static_cast<BangBangSetpointLaw::Measurement>(raw) / 10; };
-    AdcFeedback<BangBangSetpointLaw, decltype(convert_adc)> feedback(adc, convert_adc);
+    AdcFeedback<BangBangSetpointLaw, [](uint16_t raw) -> BangBangSetpointLaw::Measurement
+                { return static_cast<BangBangSetpointLaw::Measurement>(raw) / 10; }>
+        feedback(adc);
 
     // GPIO Actuator
-    auto convert_gpio = [](bool cmd) -> BangBangSetpointLaw::Command { return cmd; };
-    GpioActuator<BangBangSetpointLaw, decltype(convert_gpio)> actuator(gpio, convert_gpio);
+    GpioActuator<BangBangSetpointLaw, [](bool cmd) -> BangBangSetpointLaw::Command { return cmd; }>
+        actuator(gpio);
 
     // Integrated controller
     Controller<BangBangSetpointLaw, decltype(feedback), decltype(actuator)> controller(

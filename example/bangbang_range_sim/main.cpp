@@ -73,13 +73,13 @@ int main()
     BangBangRangeLaw law(20 /* min */, 80 /* max */);
 
     // ADC Feedback
-    auto convert_adc = [](uint16_t raw) -> BangBangRangeLaw::Measurement
-    { return static_cast<BangBangRangeLaw::Measurement>(raw) / 10; };
-    AdcFeedback<BangBangRangeLaw, decltype(convert_adc)> feedback(adc, convert_adc);
+    AdcFeedback<BangBangRangeLaw, [](uint16_t raw) -> BangBangRangeLaw::Measurement
+                { return static_cast<BangBangRangeLaw::Measurement>(raw) / 10; }>
+        feedback(adc);
 
     // GPIO Actuator
-    auto convert_gpio = [](bool cmd) -> BangBangRangeLaw::Command { return cmd; };
-    GpioActuator<BangBangRangeLaw, decltype(convert_gpio)> actuator(gpio, convert_gpio);
+    GpioActuator<BangBangRangeLaw, [](bool cmd) -> BangBangRangeLaw::Command { return cmd; }>
+        actuator(gpio);
 
     // Integrated controller
     Controller<BangBangRangeLaw, decltype(feedback), decltype(actuator)> controller(feedback,
