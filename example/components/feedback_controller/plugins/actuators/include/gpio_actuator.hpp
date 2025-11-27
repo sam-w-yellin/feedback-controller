@@ -8,7 +8,7 @@ class GpioActuator
 {
    public:
     using Command = typename LAW::Command;
-    using State = bool; 
+    using State = bool;
 
     GpioActuator(Gpio& gpio, Converter converter) : gpio_(gpio), Convert(converter) {}
 
@@ -35,6 +35,7 @@ class GpioActuator
     }
 
     Converter Convert;
+
    private:
     Gpio& gpio_;
 };

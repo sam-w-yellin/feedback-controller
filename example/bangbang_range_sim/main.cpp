@@ -82,8 +82,8 @@ int main()
     GpioActuator<BangBangRangeLaw, decltype(convert_gpio)> actuator(gpio, convert_gpio);
 
     // Integrated controller
-    Controller<BangBangRangeLaw, decltype(feedback), decltype(actuator)> controller(feedback, actuator,
-                                                                               law);
+    Controller<BangBangRangeLaw, decltype(feedback), decltype(actuator)> controller(feedback,
+                                                                                    actuator, law);
 
     auto init = controller.Initialize();
 

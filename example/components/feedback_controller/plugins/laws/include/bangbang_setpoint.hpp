@@ -4,8 +4,8 @@
 
 struct BangBangSetpointLaw
 {
-    using Measurement = int32_t; 
-    using Command = bool; 
+    using Measurement = int32_t;
+    using Command = bool;
     struct State
     {
         Command last_command{};
@@ -30,9 +30,12 @@ struct BangBangSetpointLaw
 
     std::expected<std::pair<Command, State>, std::string> Compute(const Measurement& m)
     {
-        if (m >= config_.setpoint) {
+        if (m >= config_.setpoint)
+        {
             state_.last_command = true;
-        } else {
+        }
+        else
+        {
             state_.last_command = false;
         }
         return std::make_pair(state_.last_command, state_);

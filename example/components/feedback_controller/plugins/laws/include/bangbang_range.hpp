@@ -4,8 +4,8 @@
 
 struct BangBangRangeLaw
 {
-    using Measurement = int32_t; 
-    using Command = bool; 
+    using Measurement = int32_t;
+    using Command = bool;
     struct State
     {
         Command last_command{};

@@ -36,6 +36,7 @@ struct AdcFeedback
     }
 
     Converter Convert;
+
    private:
     Adc& adc_;
 };

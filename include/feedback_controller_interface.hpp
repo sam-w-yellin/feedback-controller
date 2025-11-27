@@ -64,17 +64,14 @@ class Controller
     std::expected<typename Law::State, std::string> Initialize()
     {
         auto err = fb_.Configure();
-        if (!err) {
-            return std::unexpected(err.error());
-        }
+        if (!err) return std::unexpected(err.error());
+
         err = act_.Configure();
-        if (!err) {
-            return std::unexpected(err.error());
-        }
+        if (!err) return std::unexpected(err.error());
+
         auto law_state = law_.Initialize();
-        if (!law_state) {
-            return std::unexpected(law_state.error());
-        }
+        if (!law_state) return std::unexpected(law_state.error());
+
         return law_state.value();
     }
 
