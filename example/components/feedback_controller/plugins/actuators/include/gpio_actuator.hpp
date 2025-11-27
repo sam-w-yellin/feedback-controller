@@ -36,7 +36,7 @@ class GpioActuator
         return {};
     }
 
-    State Convert(LAW::Command command)
+    constexpr State Convert(LAW::Command command)
     {
         return Converter(command);
     };

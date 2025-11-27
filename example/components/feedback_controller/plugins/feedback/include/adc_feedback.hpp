@@ -35,7 +35,7 @@ struct AdcFeedback
         return {};
     }
 
-    LAW::Measurement Convert(Raw raw)
+    constexpr LAW::Measurement Convert(Raw raw)
     {
         return Converter(raw);
     };
