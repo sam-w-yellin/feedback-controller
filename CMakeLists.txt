@@ -5,6 +5,8 @@ set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+add_compile_options(-Wconversion -Werror -Wall -Wextra -Wpedantic)
+
 # Header-only interface library
 add_library(feedback_controller_interface INTERFACE)
 target_include_directories(feedback_controller_interface INTERFACE
