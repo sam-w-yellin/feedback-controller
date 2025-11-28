@@ -10,11 +10,11 @@ class SimulatedGpio : public Gpio
    public:
     SimulatedGpio(bool initial_state = false) : state_(initial_state) {}
 
-    std::expected<void, std::string> Configure(Direction dir) final override;
+    std::expected<void, std::string_view> Configure(Direction dir) final override;
 
-    std::expected<void, std::string> Set(bool value) final override;
+    std::expected<void, std::string_view> Set(bool value) final override;
 
-    std::expected<bool, std::string> Read() final override;
+    std::expected<bool, std::string_view> Read() final override;
 
    private:
     bool state_;

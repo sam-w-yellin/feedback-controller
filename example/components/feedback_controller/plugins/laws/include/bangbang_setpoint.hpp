@@ -21,14 +21,14 @@ struct BangBangSetpointLaw
         config_.setpoint = setpoint;
     }
 
-    std::expected<State, std::string> Initialize()
+    std::expected<State, std::string_view> Initialize()
     {
         State s{};
         s.last_command = false;
         return s;
     }
 
-    std::expected<std::pair<Command, State>, std::string> Compute(const Measurement& m)
+    std::expected<std::pair<Command, State>, std::string_view> Compute(const Measurement& m)
     {
         if (m >= config_.setpoint)
         {

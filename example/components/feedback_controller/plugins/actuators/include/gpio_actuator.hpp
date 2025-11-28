@@ -12,7 +12,7 @@ class GpioActuator
 
     GpioActuator(Gpio& gpio) : gpio_(gpio) {}
 
-    std::expected<State, std::string> Write(const Command& cmd)
+    std::expected<State, std::string_view> Write(const Command& cmd)
     {
         // A bit contrived for this example because the Command type
         // happens to be the same type for the GPIO interface.
@@ -20,18 +20,17 @@ class GpioActuator
         const auto result = gpio_.Set(gpio_state);
         if (!result)
         {
-            return std::unexpected(std::format("Failed to set GPIO: {}", result.error()));
+            return std::unexpected(result.error());
         }
         return gpio_state;
     }
 
-    std::expected<void, std::string> Configure()
+    std::expected<void, std::string_view> Configure()
     {
         const auto configure_result = gpio_.Configure(Gpio::Output);
         if (!configure_result)
         {
-            return std::unexpected(
-                std::format("GPIO configure failed: {}", configure_result.error()));
+            return std::unexpected(configure_result.error());
         }
         return {};
     }

@@ -2,13 +2,13 @@
 
 #include <cstdint>
 
-std::expected<void, std::string> SimulatedGpio::Configure(Direction dir)
+std::expected<void, std::string_view> SimulatedGpio::Configure(Direction dir)
 {
     direction_ = dir;
     return {};
 };
 
-std::expected<void, std::string> SimulatedGpio::Set(bool value)
+std::expected<void, std::string_view> SimulatedGpio::Set(bool value)
 {
     if (direction_ != Direction::Output)
     {
@@ -18,7 +18,7 @@ std::expected<void, std::string> SimulatedGpio::Set(bool value)
     return {};
 };
 
-std::expected<bool, std::string> SimulatedGpio::Read()
+std::expected<bool, std::string_view> SimulatedGpio::Read()
 {
     return state_;
 };

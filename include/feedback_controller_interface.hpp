@@ -19,24 +19,24 @@ concept ControlLaw = requires(C law, const typename C::Measurement& m) {
     typename C::Command;
     typename C::State;
 
-    { law.Initialize() } -> std::same_as<std::expected<typename C::State, std::string>>;
+    { law.Initialize() } -> std::same_as<std::expected<typename C::State, std::string_view>>;
 
     {
         law.Compute(m)
-    }
-    -> std::same_as<std::expected<std::pair<typename C::Command, typename C::State>, std::string>>;
+    } -> std::same_as<
+        std::expected<std::pair<typename C::Command, typename C::State>, std::string_view>>;
 };
 
 template <typename FB, typename Law>
 concept Feedback = ControlLaw<Law> && requires(FB fb) {
     typename FB::State;
 
-    { fb.Configure() } -> std::same_as<std::expected<void, std::string>>;
+    { fb.Configure() } -> std::same_as<std::expected<void, std::string_view>>;
 
     {
         fb.Read()
     } -> std::same_as<
-        std::expected<std::pair<typename Law::Measurement, typename FB::State>, std::string>>;
+        std::expected<std::pair<typename Law::Measurement, typename FB::State>, std::string_view>>;
 
     { fb.Convert(std::declval<typename FB::Raw>()) } -> std::same_as<typename Law::Measurement>;
 };
@@ -45,9 +45,9 @@ template <typename AC, typename Law>
 concept Actuator = ControlLaw<Law> && requires(AC ac, const typename Law::Command& cmd) {
     typename AC::State;
 
-    { ac.Configure() } -> std::same_as<std::expected<void, std::string>>;
+    { ac.Configure() } -> std::same_as<std::expected<void, std::string_view>>;
 
-    { ac.Write(cmd) } -> std::convertible_to<std::expected<typename AC::State, std::string>>;
+    { ac.Write(cmd) } -> std::convertible_to<std::expected<typename AC::State, std::string_view>>;
 
     { ac.Convert(std::declval<typename Law::Command>()) } -> std::same_as<typename AC::State>;
 };
@@ -61,7 +61,7 @@ class Controller
 
     Controller(FB& feedback, ACT& actuator, Law& law) : fb_(feedback), act_(actuator), law_(law) {}
 
-    std::expected<typename Law::State, std::string> Initialize()
+    std::expected<typename Law::State, std::string_view> Initialize()
     {
         auto err = fb_.Configure();
         if (!err) return std::unexpected(err.error());
@@ -75,7 +75,7 @@ class Controller
         return law_state.value();
     }
 
-    std::expected<ControllerState<FB, Law, ACT>, std::string> Step()
+    std::expected<ControllerState<FB, Law, ACT>, std::string_view> Step()
     {
         auto fb_result = fb_.Read();
         if (!fb_result) return std::unexpected(fb_result.error());

@@ -12,9 +12,9 @@ struct AdcFeedback
 
     AdcFeedback(Adc& adc) : adc_(adc) {}
 
-    std::expected<std::pair<Measurement, State>, std::string> Read()
+    std::expected<std::pair<Measurement, State>, std::string_view> Read()
     {
-        std::expected<Raw, std::string> maybe_raw = adc_.ReadRaw();
+        std::expected<Raw, std::string_view> maybe_raw = adc_.ReadRaw();
         if (!maybe_raw.has_value())
         {
             return std::unexpected(maybe_raw.error());
@@ -24,13 +24,12 @@ struct AdcFeedback
         return std::pair{m, std::pair{m, raw}};
     }
 
-    std::expected<void, std::string> Configure()
+    std::expected<void, std::string_view> Configure()
     {
         const auto configure_result = adc_.Configure();
         if (!configure_result)
         {
-            return std::unexpected(
-                std::format("ADC configure failed: {}", configure_result.error()));
+            return std::unexpected(configure_result.error());
         }
         return {};
     }

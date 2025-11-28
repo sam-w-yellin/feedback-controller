@@ -13,9 +13,9 @@ struct Gpio
         Output
     };
 
-    virtual std::expected<void, std::string> Configure(Direction dir) = 0;
+    virtual std::expected<void, std::string_view> Configure(Direction dir) = 0;
 
-    virtual std::expected<void, std::string> Set(bool value) = 0;
+    virtual std::expected<void, std::string_view> Set(bool value) = 0;
 
-    virtual std::expected<bool, std::string> Read() = 0;
+    virtual std::expected<bool, std::string_view> Read() = 0;
 };

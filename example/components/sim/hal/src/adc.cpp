@@ -1,11 +1,11 @@
 #include "adc.hpp"
 
-std::expected<void, std::string> SimulatedAdc::Configure()
+std::expected<void, std::string_view> SimulatedAdc::Configure()
 {
     return {};
 }
 
-std::expected<uint16_t, std::string> SimulatedAdc::ReadRaw()
+std::expected<uint16_t, std::string_view> SimulatedAdc::ReadRaw()
 {
     return raw_value_;
 }
