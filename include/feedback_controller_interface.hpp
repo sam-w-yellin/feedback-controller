@@ -64,13 +64,22 @@ class Controller
     std::expected<typename Law::State, std::string_view> Initialize()
     {
         auto err = fb_.Configure();
-        if (!err) return std::unexpected(err.error());
+        if (!err)
+        {
+            return std::unexpected(err.error());
+        }
 
         err = act_.Configure();
-        if (!err) return std::unexpected(err.error());
+        if (!err)
+        {
+            return std::unexpected(err.error());
+        }
 
         auto law_state = law_.Initialize();
-        if (!law_state) return std::unexpected(law_state.error());
+        if (!law_state)
+        {
+            return std::unexpected(law_state.error());
+        }
 
         return law_state.value();
     }
@@ -78,15 +87,24 @@ class Controller
     std::expected<ControllerState<FB, Law, ACT>, std::string_view> Step()
     {
         auto fb_result = fb_.Read();
-        if (!fb_result) return std::unexpected(fb_result.error());
+        if (!fb_result)
+        {
+            return std::unexpected(fb_result.error());
+        }
         auto [measurement, fb_state] = *fb_result;
 
         auto law_result = law_.Compute(measurement);
-        if (!law_result) return std::unexpected(law_result.error());
+        if (!law_result)
+        {
+            return std::unexpected(law_result.error());
+        }
         auto [command, law_state] = *law_result;
 
         auto act_result = act_.Write(command);
-        if (!act_result) return std::unexpected(act_result.error());
+        if (!act_result)
+        {
+            return std::unexpected(act_result.error());
+        }
         auto act_state = *act_result;
 
         ControllerState<FB, Law, ACT> state{
