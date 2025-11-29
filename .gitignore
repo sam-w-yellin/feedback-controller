@@ -43,6 +43,8 @@
 # cmake
 build/
 *CMakeFiles*
+*.cmake
+Makefile
 
 # sim
 sim.log
