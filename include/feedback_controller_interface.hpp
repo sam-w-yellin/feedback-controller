@@ -1,3 +1,6 @@
+// Copyright (c) 2025 Sam Yellin
+// Licensed under the MIT License. See the LICENSE file for details.
+
 #pragma once
 
 #include <concepts>
